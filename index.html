@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Chams POS</title>
+</head>
+<body>
+    <div>
+        <h1>CHAMS POS</h1>
+        <ul>
+            <li>
+                <form id="add-item-form">
+                    <span>ADD A PRODUCT</span> <br>
+                    <input type="text" name="item-name" id="item-name" placeholder="ITEM NAME"> <br>
+                    <input type="number" name="quantity" id="quantity" placeholder="QUANTITY"> <br>
+                    <input type="number" name="price" id="price" placeholder="PRICE"> <br><br>
+                    <button type="submit">ADD ITEM</button>
+                </form>
+            </li>
+
+            <li>
+                <table id="order-summary"> 
+                    <caption>ORDER SUMMARY</caption> 
+                    <tr id="first-row"> 
+                        <th>S/N</th>
+                        <th>ITEM NAME</th>
+                        <th>QTY</th>
+                        <th>PRICE</th>
+                    </tr>
+                </table>
+                <p id="total-amount">Total Amount: N0.00</p>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        document.getElementById('add-item-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            // Get input values
+            var itemName = document.getElementById('item-name').value;
+            var quantity = parseInt(document.getElementById('quantity').value);
+            var price = parseFloat(document.getElementById('price').value);
+            
+            // Add row to the table
+            var table = document.getElementById('order-summary');
+            var newRow = table.insertRow(-1);
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+            cell1.textContent = table.rows.length - 1; // Serial number
+            cell2.textContent = itemName;
+            cell3.textContent = quantity;
+            cell4.textContent = price.toFixed(2); // Display price with 2 decimal places
+            
+            // Calculate total amount
+            var totalAmount = calculateTotalAmount();
+            document.getElementById('total-amount').textContent = "Total Amount: $" + totalAmount.toFixed(2);
+            
+            // Clear input fields
+            document.getElementById('item-name').value = '';
+            document.getElementById('quantity').value = '';
+            document.getElementById('price').value = '';
+        });
+
+        function calculateTotalAmount() {
+            var total = 0;
+            var table = document.getElementById('order-summary');
+            for (var i = 1; i < table.rows.length; i++) {
+                var price = parseFloat(table.rows[i].cells[3].textContent);
+                var quantity = parseInt(table.rows[i].cells[2].textContent);
+                total += price * quantity;
+            }
+            return total;
+        }
+    </script>
+</body>
+</html>
